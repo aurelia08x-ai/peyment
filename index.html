@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>miori store - ช่องทางการโอนเงิน</title>
+
+  <!-- โหลดฟอนต์ Prompt จาก Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- โหลด Tailwind CSS สำหรับจัดหน้า Responsive (มือถือ / iPad / คอมพิวเตอร์) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    // ตั้งค่าสีและฟอนต์สไตล์จิไรเคย์ (Jirai Kei) โทนชมพูครีม น่ารัก ไม่รก
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Prompt', 'sans-serif'],
+          },
+          colors: {
+            cream: {
+              50: '#FFFDFB',
+              100: '#FFF7F4',
+              200: '#FCECE6',
+            },
+            jiraiPink: {
+              100: '#FCE4EC',
+              200: '#F8BBD0',
+              300: '#F48FB1',
+              400: '#EC6A96',
+              500: '#D84B7B',
+            },
+            jiraiDark: {
+              700: '#5C454D',
+              800: '#3D2B31',
+              900: '#2A1D21',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* สไตล์เสริมแนวจิไรเคย์ละมุนๆ (Jirai Kei Soft Lace & Ribbon Accent) */
+    body {
+      font-family: 'Prompt', sans-serif;
+      background-color: #FFF7F4;
+      color: #3D2B31;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ขอบลูกไม้บางๆ ด้านบนการ์ดให้ได้กลิ่นอายจิไรเคย์แบบไม่รก */
+    .jirai-lace-top {
+      background-image: radial-gradient(circle at 8px 0, #FCE4EC 6px, transparent 6.5px);
+      background-size: 16px 8px;
+      background-repeat: repeat-x;
+    }
+
+    .jirai-card {
+      box-shadow: 0 12px 28px -8px rgba(216, 75, 123, 0.12), 0 4px 10px -4px rgba(42, 29, 33, 0.05);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-gradient-to-b from-cream-100 via-cream-50 to-jiraiPink-100/50 relative">
+
+  <!-- กล่องแจ้งเตือนแบบนุ่มนวล (แทน alert() เพื่อความสวยงามและไม่เด้งค้าง) -->
+  <div id="toast-box" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 w-[92%] max-w-sm">
+    <div class="bg-jiraiDark-900 text-cream-50 px-4 py-3 rounded-2xl shadow-xl border border-jiraiPink-300/40 flex items-center justify-center gap-2 text-xs sm:text-sm text-center">
+      <span id="toast-icon">🎀</span>
+      <span id="toast-text">ข้อความแจ้งเตือน</span>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       2. พื้นที่เนื้อหาหลัก (Main Content)
+       ========================================================= -->
+  <main class="flex-1 w-full max-w-2xl mx-auto px-4 py-5 sm:py-7">
+
+    <!-- *********************************************************
+         ส่วนที่ A: หน้าบ้านสำหรับลูกค้า (Customer Transfer View)
+         ********************************************************* -->
+    <section id="view-customer" class="space-y-5">
+
+      <!-- การ์ดแบนเนอร์ 1920x800px + โลโก้ร้าน สไตล์จิไรเคย์ -->
+      <div class="bg-white rounded-3xl overflow-hidden border border-jiraiPink-200 jirai-card">
+        <!-- แบนเนอร์สัดส่วน 1920:800 (aspect-[12/5]) รองรับทุกหน้าจอโดยไม่ตัดขอบเสียสัดส่วน -->
+        <div class="relative w-full aspect-[12/5] bg-jiraiPink-100 overflow-hidden">
+          <img
+            id="customer-banner"
+            src="4d1b29092d1427d1a8ec9c6b45fce28f.jpg"
+            onerror="this.src='https://placehold.co/1920x800/FCE4EC/3D2B31?text=Banner+Not+Found+(4d1b29092d1427d1a8ec9c6b45fce28f.jpg)'"
+            alt="แบนเนอร์ร้าน miori store ขนาด 1920x800"
+            class="w-full h-full object-cover"
+          />
+        </div>
+
+        <!-- โลโก้ร้านซ้อนขอบแบนเนอร์ + ชื่อร้านและข้อความต้อนรับ -->
+        <div class="px-5 pb-6 pt-0 text-center relative">
+          <div class="relative -mt-11 sm:-mt-12 inline-block">
+            <img
+              id="customer-logo"
+              src="778018b5-52bb-4484-bfd3-98b72e04ccfc.jpe"
+              onerror="this.src='https://placehold.co/200x200/FCE4EC/3D2B31?text=miori'"
+              alt="โลโก้ร้าน miori store"
+              class="w-22 h-22 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-white ring-2 ring-jiraiDark-800/80 shadow-md bg-white mx-auto"
+            />
+            <span class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-jiraiDark-800 text-jiraiPink-200 text-xs flex items-center justify-center border-2 border-white shadow">
+              🖤
+            </span>
+          </div>
+
+          <h1 id="customer-store-name" class="text-xl sm:text-2xl font-bold text-jiraiDark-900 mt-2.5 tracking-tight">
+            miori store
+          </h1>
+          <p id="customer-store-bio" class="text-xs sm:text-sm text-jiraiDark-700/85 mt-1 max-w-md mx-auto leading-relaxed">
+            ช่องทางการโอนเงินอย่างเป็นทางการ เลือกบัญชีหรือวอเล็ทด้านล่างเพื่อคัดลอกเลขหรือบันทึกรูปคิวอาร์โค้ดได้เลยค่ะ 🎀
+          </p>
+        </div>
+      </div>
+
+      <!-- การ์ดเลือกช่องทางการโอน (บัญชีธนาคาร / วอเล็ท) -->
+      <div class="bg-white rounded-3xl p-5 border border-jiraiPink-200 jirai-card space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm sm:text-base font-bold text-jiraiDark-900 flex items-center gap-2">
+            <span class="text-jiraiPink-500">✦</span>
+            เลือกช่องทางการโอนเงิน
+          </h2>
+          <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-cream-200 text-jiraiDark-700">
+            ข้อมูลตัวอย่าง (Demo)
+          </span>
+        </div>
+
+        <!-- ปุ่มแท็บเลือกช่องทาง (บัญชีธนาคาร / วอเล็ท) -->
+        <div id="channel-tabs" class="grid grid-cols-2 gap-2.5">
+          <!-- JavaScript จะสร้างปุ่มช่องทางตรงนี้ -->
+        </div>
+
+        <!-- กล่องแสดงเลขบัญชี / เบอร์วอเล็ท + ปุ่มคัดลอก -->
+        <div class="bg-cream-100 rounded-2xl p-4 sm:p-5 border border-jiraiPink-200/80 space-y-3">
+          <div class="flex items-center justify-between text-xs text-jiraiDark-700">
+            <span>ช่องทาง / ธนาคาร</span>
+            <span id="display-provider" class="font-semibold text-jiraiDark-900">ธนาคารกสิกรไทย (Demo)</span>
+          </div>
+          <div class="flex items-center justify-between text-xs text-jiraiDark-700">
+            <span>ชื่อบัญชี</span>
+            <span id="display-acc-name" class="font-semibold text-jiraiDark-900">ร้าน มิโอริ สโตร์ (ตัวอย่าง Demo)</span>
+          </div>
+
+          <div class="pt-3 border-t border-jiraiPink-200/70 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <p id="display-number-label" class="text-[11px] text-jiraiDark-700/75">เลขที่บัญชี (Demo)</p>
+              <p id="display-acc-number" class="text-lg sm:text-xl font-bold tracking-wider text-jiraiPink-500 truncate">
+                000-0-00000-0
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onclick="copyCurrentNumber()"
+              class="px-4 py-2.5 rounded-2xl bg-jiraiDark-800 hover:bg-jiraiDark-900 active:scale-95 text-jiraiPink-100 text-xs sm:text-sm font-medium shadow-sm transition-all flex items-center gap-1.5 shrink-0"
+            >
+              <!-- ไอคอนคัดลอก (Inline SVG) -->
+              <svg class="w-4 h-4 text-jiraiPink-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span id="copy-btn-text">คัดลอกเลขบัญชี</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ส่วนแสดงรูป QR Code + ปุ่มบันทึกรูปคิวอาร์โค้ด -->
+        <div class="bg-cream-50 rounded-2xl p-4 sm:p-5 border border-dashed border-jiraiPink-300 flex flex-col items-center text-center">
+          <p class="text-xs font-medium text-jiraiDark-800 mb-3">
+            บันทึกรูปคิวอาร์โค้ดเพื่อสแกนโอนในแอปธนาคาร / วอเล็ท
+          </p>
+
+          <div class="bg-white p-3 rounded-2xl shadow-sm border border-jiraiPink-200">
+            <img
+              id="display-qr-img"
+              src=""
+              alt="คิวอาร์โค้ดสำหรับโอนเงิน (Demo)"
+              class="w-48 h-48 sm:w-52 sm:h-52 object-contain rounded-xl"
+            />
+          </div>
+
+          <p class="text-[11px] text-jiraiDark-700/70 mt-2.5">
+            * ภาพคิวอาร์โค้ดนี้เป็นตัวอย่าง (Demo) สำหรับทดสอบการบันทึกรูปเท่านั้น
+          </p>
+
+          <button
+            type="button"
+            onclick="saveQRImage()"
+            class="mt-4 w-full sm:w-auto sm:min-w-[260px] py-3 px-6 rounded-2xl bg-gradient-to-r from-jiraiPink-400 to-jiraiPink-500 hover:from-jiraiPink-500 hover:to-jiraiPink-500 active:scale-[0.98] text-white font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+            </svg>
+            บันทึกรูปคิวอาร์โค้ด
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       3. ส่วนท้ายเว็บ (Footer)
+       ========================================================= -->
+  <footer class="max-w-2xl mx-auto w-full px-4 py-6 text-center text-[11px] text-jiraiDark-700/75 space-y-1">
+    <p>© 2026 miori store • เว็บช่องทางการโอนเงิน (ต้นแบบ Demo)</p>
+    <p>เลขบัญชี วอเล็ท และคิวอาร์โค้ดทั้งหมดเป็นข้อมูลตัวอย่างสำหรับทดสอบระบบ</p>
+  </footer>
+
+  <!-- =========================================================
+       4. สคริปต์ควบคุมการทำงาน (JavaScript)
+       ========================================================= -->
+  <script>
+    /**
+     * ฟังก์ชันวาดภาพ QR Code ตัวอย่าง (Demo) สไตล์จิไรเคย์ชมพู-ดำ
+     * เพื่อให้มีป้าย DEMO ชัดเจน และกดบันทึกรูปลง iPad / มือถือได้ทันทีโดยไม่ติดปัญหาสิทธิ์ข้ามโดเมน
+     */
+    function generateDemoQR(channelTitle) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 420;
+      canvas.height = 420;
+      const ctx = canvas.getContext('2d');
+
+      // พื้นหลังสีขาวครีม
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, 420, 420);
+
+      // กรอบนอกสีน้ำตาลเข้มจิไรเคย์ + ขอบในสีชมพู
+      ctx.strokeStyle = '#3D2B31';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(14, 14, 392, 392);
+
+      ctx.strokeStyle = '#F48FB1';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(24, 24, 372, 372);
+
+      // วาดตาราง QR จำลอง
+      ctx.fillStyle = '#3D2B31';
+      const startX = 65;
+      const startY = 58;
+      const size = 14;
+      for (let r = 0; r < 16; r++) {
+        for (let c = 0; c < 21; c++) {
+          if (r >= 6 && r <= 9 && c >= 4 && c <= 16) continue;
+          if ((r * 5 + c * 11) % 3 === 0 || (r < 3 && c < 3) || (r < 3 && c > 17) || (r > 12 && c < 3)) {
+            ctx.fillRect(startX + c * size, startY + r * size, size - 2, size - 2);
+          }
+        }
+      }
+
+      // ป้ายตรงกลางระบุชัดเจนว่าเป็น DEMO
+      ctx.fillStyle = '#FCE4EC';
+      ctx.fillRect(95, 142, 230, 56);
+      ctx.strokeStyle = '#3D2B31';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(95, 142, 230, 56);
+
+      ctx.fillStyle = '#D84B7B';
+      ctx.font = 'bold 21px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('QR DEMO ONLY', 210, 177);
+
+      // ข้อความด้านล่าง
+      ctx.fillStyle = '#3D2B31';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('miori store 🎀', 210, 326);
+
+      ctx.fillStyle = '#D84B7B';
+      ctx.font = '15px sans-serif';
+      ctx.fillText(channelTitle + ' (ตัวอย่างทดสอบ)', 210, 356);
+
+      return canvas.toDataURL('image/png');
+    }
+
+    // ข้อมูลตั้งต้น — สามารถแก้ไขข้อความหรือลิงก์รูปภาพตรงส่วนนี้ในโค้ดได้โดยตรง
+    const storeConfig = {
+      storeName: 'miori store',
+      storeBio: 'ช่องทางการโอนเงินอย่างเป็นทางการ เลือกบัญชีหรือวอเล็ทด้านล่างเพื่อคัดลอกเลขหรือบันทึกรูปคิวอาร์โค้ดได้เลยค่ะ 🎀',
+      logoUrl: '778018b5-52bb-4484-bfd3-98b72e04ccfc.jpe',
+      bannerUrl: '4d1b29092d1427d1a8ec9c6b45fce28f.jpg',
+      channels: [
+        {
+          id: 'bank',
+          tabTitle: 'บัญชีธนาคาร',
+          numberLabel: 'เลขที่บัญชี (Demo)',
+          copyBtnLabel: 'คัดลอกเลขบัญชี',
+          provider: 'ธนาคารตัวอย่าง (กสิกรไทย - Demo)',
+          accName: 'ร้าน มิโอริ สโตร์ (ข้อมูลตัวอย่าง Demo)',
+          accNumber: '000-0-00000-0',
+          qrUrl: generateDemoQR('Bank Account')
+        },
+        {
+          id: 'wallet',
+          tabTitle: 'ทรูมันนี่ วอเล็ท',
+          numberLabel: 'เบอร์วอเล็ท (Demo)',
+          copyBtnLabel: 'คัดลอกเบอร์วอเล็ท',
+          provider: 'TrueMoney Wallet (Demo)',
+          accName: 'ร้าน มิโอริ สโตร์ (ข้อมูลตัวอย่าง Demo)',
+          accNumber: '099-000-0000',
+          qrUrl: generateDemoQR('TrueMoney Wallet')
+        }
+      ]
+    };
+
+    let currentChannelIndex = 0;
+
+    // โหลดข้อมูลเริ่มต้น
+    function initApp() {
+      renderCustomerPage();
+    }
+
+    // กล่องข้อความแจ้งเตือนแบบนุ่มนวล
+    let toastTimer;
+    function showToast(text, icon = '🎀') {
+      const box = document.getElementById('toast-box');
+      document.getElementById('toast-text').textContent = text;
+      document.getElementById('toast-icon').textContent = icon;
+      box.classList.remove('opacity-0');
+      box.classList.add('opacity-100');
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        box.classList.remove('opacity-100');
+        box.classList.add('opacity-0');
+      }, 2800);
+    }
+
+    // อัปเดตการแสดงผลหน้าลูกค้า
+    function renderCustomerPage() {
+      document.getElementById('customer-store-name').textContent = storeConfig.storeName;
+      document.getElementById('customer-store-bio').textContent = storeConfig.storeBio;
+
+      const logo = storeConfig.logoUrl || 'https://placehold.co/200x200/FCE4EC/3D2B31?text=miori';
+      const banner = storeConfig.bannerUrl || 'https://placehold.co/1920x800/FCE4EC/3D2B31?text=1920x800+Banner';
+
+      document.getElementById('customer-logo').src = logo;
+      document.getElementById('customer-banner').src = banner;
+
+      // สร้างปุ่มเลือกช่องทาง (บัญชีธนาคาร / วอเล็ท)
+      const tabContainer = document.getElementById('channel-tabs');
+      tabContainer.innerHTML = '';
+
+      storeConfig.channels.forEach((item, index) => {
+        const active = index === currentChannelIndex;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => {
+          currentChannelIndex = index;
+          renderCustomerPage();
+        };
+        btn.className = active
+          ? 'py-3 px-3 rounded-2xl border-2 border-jiraiDark-800 bg-jiraiPink-100 text-jiraiDark-900 font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 shadow-sm'
+          : 'py-3 px-3 rounded-2xl border border-jiraiPink-200 bg-cream-50 hover:bg-cream-100 text-jiraiDark-700 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5';
+
+        btn.innerHTML = `
+          <span>${active ? '🖤' : '🤍'}</span>
+          <span>${item.tabTitle}</span>
+        `;
+        tabContainer.appendChild(btn);
+      });
+
+      // แสดงรายละเอียดของช่องทางที่เลือก
+      const selected = storeConfig.channels[currentChannelIndex];
+      if (selected) {
+        document.getElementById('display-provider').textContent = selected.provider;
+        document.getElementById('display-acc-name').textContent = selected.accName;
+        document.getElementById('display-number-label').textContent = selected.numberLabel;
+        document.getElementById('display-acc-number').textContent = selected.accNumber;
+        document.getElementById('copy-btn-text').textContent = selected.copyBtnLabel;
+        document.getElementById('display-qr-img').src = selected.qrUrl;
+      }
+    }
+
+    // คัดลอกเลขบัญชี / เบอร์วอเล็ท
+    function copyCurrentNumber() {
+      const selected = storeConfig.channels[currentChannelIndex];
+      const tempField = document.createElement('input');
+      tempField.value = selected.accNumber;
+      document.body.appendChild(tempField);
+      tempField.select();
+      tempField.setSelectionRange(0, 99999);
+
+      try {
+        document.execCommand('copy');
+        showToast(`คัดลอก ${selected.accNumber} เรียบร้อยแล้วค่ะ`, '📋');
+      } catch (err) {
+        showToast('ไม่สามารถคัดลอกอัตโนมัติ กรุณากดค้างที่ตัวเลขเพื่อคัดลอกค่ะ', '⚠️');
+      }
+      document.body.removeChild(tempField);
+    }
+
+    // บันทึกรูปคิวอาร์โค้ดลงเครื่อง
+    function saveQRImage() {
+      const selected = storeConfig.channels[currentChannelIndex];
+      const a = document.createElement('a');
+      a.href = selected.qrUrl;
+      a.download = `QR_${storeConfig.storeName.replace(/\s+/g, '_')}_${selected.id}_Demo.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      showToast('กำลังบันทึกรูป QR Code (หากเปิดบน iPad/iPhone Safari สามารถกดค้างที่รูปแล้วเลือก "บันทึกรูปภาพ" ได้ด้วยค่ะ)', '📥');
+    }
+
+    window.onload = initApp;
+  </script>
+</body>
+</html>
