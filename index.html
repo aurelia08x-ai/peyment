@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aurelia store - ช่องทางการโอนเงิน</title>
+  <title>Aurelia Store - ช่องทางการโอนเงิน</title>
 
   <!-- โหลดฟอนต์ Prompt จาก Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -94,7 +94,7 @@
             id="customer-banner"
             src="4d1b29092d1427d1a8ec9c6b45fce28f.jpg"
             onerror="this.src='https://placehold.co/1920x800/FCE4EC/3D2B31?text=Banner+Not+Found+(4d1b29092d1427d1a8ec9c6b45fce28f.jpg)'"
-            alt="แบนเนอร์ร้าน miori store ขนาด 1920x800"
+            alt="แบนเนอร์ร้าน Aurelia Store ขนาด 1920x800"
             class="w-full h-full object-cover"
           />
         </div>
@@ -105,8 +105,8 @@
             <img
               id="customer-logo"
               src="778018b5-52bb-4484-bfd3-98b72e04ccfc.jpe"
-              onerror="this.src='https://placehold.co/200x200/FCE4EC/3D2B31?text=miori'"
-              alt="โลโก้ร้าน miori store"
+              onerror="this.src='https://placehold.co/200x200/FCE4EC/3D2B31?text=Aurelia'"
+              alt="โลโก้ร้าน Aurelia Store"
               class="w-22 h-22 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-white ring-2 ring-jiraiDark-800/80 shadow-md bg-white mx-auto"
             />
             <span class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-jiraiDark-800 text-jiraiPink-200 text-xs flex items-center justify-center border-2 border-white shadow">
@@ -115,7 +115,7 @@
           </div>
 
           <h1 id="customer-store-name" class="text-xl sm:text-2xl font-bold text-jiraiDark-900 mt-2.5 tracking-tight">
-            miori store
+            Aurelia Store
           </h1>
           <p id="customer-store-bio" class="text-xs sm:text-sm text-jiraiDark-700/85 mt-1 max-w-md mx-auto leading-relaxed">
             ช่องทางการโอนเงินอย่างเป็นทางการ เลือกบัญชีหรือวอเล็ทด้านล่างเพื่อคัดลอกเลขหรือบันทึกรูปคิวอาร์โค้ดได้เลยค่ะ 🎀
@@ -148,7 +148,7 @@
           </div>
           <div class="flex items-center justify-between text-xs text-jiraiDark-700">
             <span>ชื่อบัญชี</span>
-            <span id="display-acc-name" class="font-semibold text-jiraiDark-900">ร้าน มิโอริ สโตร์ (ตัวอย่าง Demo)</span>
+            <span id="display-acc-name" class="font-semibold text-jiraiDark-900">ร้าน Aurelia Store (ตัวอย่าง Demo)</span>
           </div>
 
           <div class="pt-3 border-t border-jiraiPink-200/70 flex items-center justify-between gap-3">
@@ -214,7 +214,7 @@
        3. ส่วนท้ายเว็บ (Footer)
        ========================================================= -->
   <footer class="max-w-2xl mx-auto w-full px-4 py-6 text-center text-[11px] text-jiraiDark-700/75 space-y-1">
-    <p>© 2026 Aurelia store • เว็บช่องทางการโอนเงิน (ต้นแบบ Demo)</p>
+    <p>© 2026 Aurelia Store • เว็บช่องทางการโอนเงิน (ต้นแบบ Demo)</p>
     <p>เลขบัญชี วอเล็ท และคิวอาร์โค้ดทั้งหมดเป็นข้อมูลตัวอย่างสำหรับทดสอบระบบ</p>
   </footer>
 
@@ -274,7 +274,7 @@
       // ข้อความด้านล่าง
       ctx.fillStyle = '#3D2B31';
       ctx.font = 'bold 20px sans-serif';
-      ctx.fillText('miori store 🎀', 210, 326);
+      ctx.fillText('Aurelia Store 🎀', 210, 326);
 
       ctx.fillStyle = '#D84B7B';
       ctx.font = '15px sans-serif';
@@ -285,7 +285,7 @@
 
     // ข้อมูลตั้งต้น — สามารถแก้ไขข้อความหรือลิงก์รูปภาพตรงส่วนนี้ในโค้ดได้โดยตรง
     const storeConfig = {
-      storeName: 'miori store',
+      storeName: 'Aurelia Store',
       storeBio: 'ช่องทางการโอนเงินอย่างเป็นทางการ เลือกบัญชีหรือวอเล็ทด้านล่างเพื่อคัดลอกเลขหรือบันทึกรูปคิวอาร์โค้ดได้เลยค่ะ 🎀',
       logoUrl: '778018b5-52bb-4484-bfd3-98b72e04ccfc.jpe',
       bannerUrl: '4d1b29092d1427d1a8ec9c6b45fce28f.jpg',
@@ -296,7 +296,7 @@
           numberLabel: 'เลขที่บัญชี (Demo)',
           copyBtnLabel: 'คัดลอกเลขบัญชี',
           provider: 'ธนาคารตัวอย่าง (กสิกรไทย - Demo)',
-          accName: 'ร้าน มิโอริ สโตร์ (ข้อมูลตัวอย่าง Demo)',
+          accName: 'ร้าน Aurelia Store (ข้อมูลตัวอย่าง Demo)',
           accNumber: '000-0-00000-0',
           qrUrl: generateDemoQR('Bank Account')
         },
@@ -306,7 +306,7 @@
           numberLabel: 'เบอร์วอเล็ท (Demo)',
           copyBtnLabel: 'คัดลอกเบอร์วอเล็ท',
           provider: 'TrueMoney Wallet (Demo)',
-          accName: 'ร้าน มิโอริ สโตร์ (ข้อมูลตัวอย่าง Demo)',
+          accName: 'ร้าน Aurelia Store (ข้อมูลตัวอย่าง Demo)',
           accNumber: '099-000-0000',
           qrUrl: generateDemoQR('TrueMoney Wallet')
         }
@@ -341,7 +341,7 @@
       document.getElementById('customer-store-name').textContent = storeConfig.storeName;
       document.getElementById('customer-store-bio').textContent = storeConfig.storeBio;
 
-      const logo = storeConfig.logoUrl || 'https://placehold.co/200x200/FCE4EC/3D2B31?text=miori';
+      const logo = storeConfig.logoUrl || 'https://placehold.co/200x200/FCE4EC/3D2B31?text=Aurelia';
       const banner = storeConfig.bannerUrl || 'https://placehold.co/1920x800/FCE4EC/3D2B31?text=1920x800+Banner';
 
       document.getElementById('customer-logo').src = logo;
